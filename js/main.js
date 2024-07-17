@@ -23,7 +23,6 @@ let mainPetri = null;
  */
 function main() {
   mainPetri = new PetriPlate("kirby-sim-container");
-  mainPetri.addAntibiotic(new Ampicillin(30));
 
   // -- temporary fill dropdown with antibiotics --
   const dropdown = document.getElementById("antibiotic-name");
