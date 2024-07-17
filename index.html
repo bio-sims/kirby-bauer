@@ -2,12 +2,35 @@
 <html lang="en">
 <head>
   <title>Kirby-Bauer Test</title>
+  <meta property="og:title" content="Kirby-Bauer Test">
+  <meta description="Simulation of the Kirby-Bauer disc-diffusion antibiotic sensitivity test.">
+  <meta property="og:description" content="Simulation of the Kirby-Bauer disc-diffusion antibiotic sensitivity test.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bio-sims.github.io/kirby-bauer/">
+  <meta property="theme-color" content="#a836ff">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- fonts and css -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <!-- following script will execute after the page has loaded -->
   <script type="module" src="js/main.js" defer></script>
 </head>
 <body>
-  <h1>Kirby-Bauer Test</h1>
+  <nav>
+    <h1>Kirby-Bauer Test</h1>
+  </nav>
+  <main>
+    <article id="kirby-sim-container"></article>
+    <!-- temporary -->
+    <form id="add-antibiotic-form">
+      <label for="antibiotic-name">Antibiotic Name:</label>
+      <select id="antibiotic-name" name="antibiotic-name"></select>
+      <button type="submit">Add Antibiotic</button>
+    </form>
+  </main>
 </body>
 </html>
