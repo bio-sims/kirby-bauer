@@ -16,6 +16,8 @@ class PetriPlate {
     this.petriBackgroundGroup = null;
     this.two.renderer.domElement.style.backgroundColor = '#000000';
     this.drawPetriBackground();
+
+    this.two.renderer.domElement.addEventListener("mousemove", this.mouseMove.bind(this));
   }
   /**
    * Draws the petri dish background layer
@@ -42,6 +44,20 @@ class PetriPlate {
    */
   addAntibiotic(antibiotic) {
     this.antibiotics.push(new AntibioticDisk(this.two.width / 2, this.two.height / 2, antibiotic, this.two));
+  }
+  /**
+   * Ensures any antibiotics that are supposed to be dragged are updated properly
+   * @param {MouseEvent} e - mouse event
+   */
+  mouseMove(e) {
+    if (e.buttons !== 1) {
+      return;
+    }
+    this.antibiotics.forEach(antibiotic => {
+      if (antibiotic.shape.isDragging) {
+        antibiotic.shape.mouseMove(e);
+      }
+    });
   }
 }
 

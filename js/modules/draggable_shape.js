@@ -15,6 +15,7 @@ class DraggableShape {
     this.shape._renderer.elem.addEventListener("mousedown", this.mouseDown.bind(this));
     this.shape._renderer.elem.addEventListener("mouseup", this.mouseUp.bind(this));
     this.shape._renderer.elem.addEventListener("mousemove", this.mouseMove.bind(this));
+    this.shape._renderer.elem.addEventListener("mouseleave", this.mouseLeave.bind(this));
 
     /**
      * Whether the shape is currently being dragged
@@ -33,6 +34,8 @@ class DraggableShape {
     this.two = two;
     /**
      * Whether the shape is currently draggable
+     * @type {boolean}
+     * @private
      */
     this._draggable = true;
 
@@ -102,15 +105,19 @@ class DraggableShape {
    * @param {MouseEvent} e - mouse event
    */
   mouseMove(e) {
+    if (e.buttons !== 1) {
+      this.mouseUp({ button: 0 });
+      return;
+    }
+    // print distance between center of shape and mouse position
     if (!this._draggable) {
       return;
     }
     if (this.isDragging) {
       const clickPosition = this.getClickPosition(e);
-      this.shape.translation.set(
-        clickPosition.x - this.clickOffset.x,
-        clickPosition.y - this.clickOffset.y,
-      );
+      const translatePosition = { x: clickPosition.x - this.clickOffset.x, y: clickPosition.y - this.clickOffset.y };
+      this.shape.translation.set(translatePosition.x, translatePosition.y);
+      this._lastMousePosition = clickPosition;
     }
   }
   /**
@@ -121,6 +128,14 @@ class DraggableShape {
     this._draggable = enable;
     this.shape._renderer.elem.style.cursor = this._draggable ? "grab" : "default";
   }
+  /**
+   * Handles when the mouse leaves the shape, as it's possible for the mouse to leave the shape while dragging
+   */
+  mouseLeave(e) {
+    if (e.buttons !== 1) {
+      this.mouseUp({ button: 0 });
+    }
+  };
 }
 
 export default DraggableShape;
