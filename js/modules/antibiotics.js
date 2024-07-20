@@ -21,12 +21,20 @@ class Antibiotic {
     this.initialAmount = amount ?? 0;
   }
   /**
+   * Returns the expected zone of inhibition radius for a given bacteria environment.
+   * @param {Bacteria} bacteria - the bacteria object the antibiotic is placed near/on
+   * @returns {number} radius in mm
+   */
+  getExpectedRing(bacteria) {
+    return 30;
+  }
+  /**
    * Returns the concentration of the antibiotic at a given radius from the center of the paper disk.
    * @param {number} radius - radius in millimeters from the center of the paper disk
-   * @returns {number} - concentration of the antibiotic in micrograms per milliliter
+   * @returns {number} concentration of the antibiotic in micrograms per milliliter
    */
   getConcentration(radius) {
-    return 1;
+    return 10;
   }
 }
 
@@ -36,9 +44,6 @@ class Ampicillin extends Antibiotic {
     this.name = "Ampicillin";
     this.abbreviation = "AM";
   }
-  getConcentration(radius) {
-    return 1;
-  }
 }
 
 class Chloramphenicol extends Antibiotic {
@@ -46,9 +51,6 @@ class Chloramphenicol extends Antibiotic {
     super(amount);
     this.name = "Chloramphenicol";
     this.abbreviation = "C";
-  }
-  getConcentration(radius) {
-    return 1;
   }
 }
 
@@ -58,9 +60,6 @@ class Penicillin extends Antibiotic {
     this.name = "Penicillin";
     this.abbreviation = "P";
   }
-  getConcentration(radius) {
-    return 1;
-  }
 }
 
 class Tetracycline extends Antibiotic {
@@ -68,9 +67,6 @@ class Tetracycline extends Antibiotic {
     super(amount);
     this.name = "Tetracycline";
     this.abbreviation = "Tc";
-  }
-  getConcentration(radius) {
-    return 1;
   }
 }
 
