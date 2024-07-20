@@ -7,23 +7,68 @@ import AntibioticDisk from "./antibiotic_disk.js";
  */
 class PetriPlate {
   constructor(containerId) {
+    /**
+     * If the simulation has been started
+     * @type {boolean}
+     */
+    this.started = false;
+    /**
+     * The two.js object responsible for rendering the dish
+     * @type {Two}
+     */
     this.two = new Two({
       width: 500,
       height: 500,
       autostart: true
     }).appendTo(document.getElementById(containerId));
-    this.antibiotics = [];
+    /**
+     * List of antibiotic disks on the dish
+     * @type {Array<AntibioticDisk>}
+     */
+    this.antibioticDisks = []
+    /**
+     * Layer where disks are rendered (foreground)
+     * @type {Two.Group}
+     */
+    this.antibioticDiskGroup = null;
+    /**
+     * Layer where the petri dish background is rendered
+     * @type {Two.Group}
+     */
     this.petriBackgroundGroup = null;
+    /**
+     * Layer where the bacteria is rendered
+     * @type {Two.Group}
+     */
+    this.bacteriaGroup = null;
+    /**
+     * Layer where the masks for the bacteria reside
+     * @type {Two.Group}
+     */
+    this.petriRingGroup = null;
+    /**
+     * Group that orders all the layers
+     * @type {Two.Group}
+     */
+    this.renderGroup = null;
     this.two.renderer.domElement.style.backgroundColor = '#000000';
-    this.drawPetriBackground();
-
     this.two.renderer.domElement.addEventListener("mousemove", this.mouseMove.bind(this));
+    this.setup();
   }
-  /**
-   * Draws the petri dish background layer
-   */
-  drawPetriBackground() {
+  setup() {
+    this.two.clear();
+    this.started = false;
+    this.antibioticDisks = [];
+    this.antibioticDiskGroup = this.two.makeGroup();
     this.petriBackgroundGroup = this.two.makeGroup();
+    this.bacteriaGroup = this.two.makeGroup();
+    this.petriRingGroup = this.two.makeGroup();
+    this.renderGroup = this.two.makeGroup([this.petriBackgroundGroup, this.bacteriaGroup, this.petriRingGroup, this.antibioticDiskGroup]);
+
+    // TODO: mask on mask grouping does not work
+    this.bacteriaGroup.mask = this.petriRingGroup;
+
+    // draw the petri dish background
     const petriDish = this.two.makeCircle(0, 0, 0.8 * this.two.width / 2);
     petriDish.fill = '#3F3824';
     petriDish.stroke = '#909090';
@@ -43,7 +88,36 @@ class PetriPlate {
    * @param {Antibiotic} antibiotic - antibiotic to add to the petri plate
    */
   addAntibiotic(antibiotic) {
-    this.antibiotics.push(new AntibioticDisk(this.two.width / 2, this.two.height / 2, antibiotic, this.two));
+    if (this.started) return;
+    const newDisk = new AntibioticDisk(this.two.width / 2, this.two.height / 2, antibiotic, this.two);
+    this.antibioticDisks.push(newDisk)
+    this.antibioticDiskGroup.add(newDisk);
+  }
+  /**
+   * Run simulation
+   */
+  run() {
+    // draw the bacteria
+    const bacteriaCircle = this.two.makeCircle(0, 0, 0.77 * this.two.width / 2)
+    bacteriaCircle.fill = '#FFD97766';
+    this.bacteriaGroup.add(bacteriaCircle);
+    this.bacteriaGroup.position.x = this.two.width / 2;
+    this.bacteriaGroup.position.y = this.two.height / 2;
+
+    this.started = true;
+    console.log(this.antibioticDisks)
+    // disable dragging for all antibiotics
+    this.antibioticDisks.forEach(disk => {
+      disk.shape.isDragging = false;
+      disk.shape.toggleDraggable(false);
+    });
+    this.antibioticDisks.forEach(disk => {
+      const spread = this.two.makeCircle(disk.shape.position.x, disk.shape.position.y, disk.antibiotic.getExpectedRing());
+      spread.fill = '#3F3824';
+      spread.linewidth = 0;
+      this.petriRingGroup.add(spread);
+      console.log(spread);
+    });
   }
   /**
    * Ensures any antibiotics that are supposed to be dragged are updated properly
@@ -53,7 +127,7 @@ class PetriPlate {
     if (e.buttons !== 1) {
       return;
     }
-    this.antibiotics.forEach(antibiotic => {
+    this.antibioticDisks.forEach(antibiotic => {
       if (antibiotic.shape.isDragging) {
         antibiotic.shape.mouseMove(e);
       }

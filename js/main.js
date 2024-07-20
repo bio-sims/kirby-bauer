@@ -32,6 +32,14 @@ function main() {
     dropdown.add(option);
   });
 
+  document.getElementById("run-test-button").addEventListener("click", () => {
+    mainPetri.run();
+  })
+
+  document.getElementById("reset-test-button").addEventListener("click", () => {
+    mainPetri.setup();
+  })
+
   // handle form submission
   document.getElementById("add-antibiotic-form").addEventListener("submit", (event) => {
     event.preventDefault();

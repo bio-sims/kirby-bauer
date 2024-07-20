@@ -41,6 +41,13 @@ class DraggableShape {
 
     this.shape._renderer.elem.style.cursor = "grab";
   }
+
+  /**
+   * Proxies internal shape's position
+   */
+  get position() {
+    return this.shape.position;
+  }
   /**
    * Gives coordinates of the click event relative to the two.js instance
    * @param {MouseEvent} e - mouse event
