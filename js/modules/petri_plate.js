@@ -1,4 +1,4 @@
-import Two from 'https://cdn.jsdelivr.net/npm/two.js/+esm';
+import Two from "https://cdn.jsdelivr.net/npm/two.js/+esm";
 import AntibioticDisk from "./antibiotic_disk.js";
 
 /**
@@ -56,7 +56,7 @@ class PetriPlate {
      * @type {number}
      */
     this.millimeterScale = 1;
-    this.two.renderer.domElement.style.backgroundColor = '#000000';
+    this.two.renderer.domElement.style.backgroundColor = "#000000";
     this.two.renderer.domElement.addEventListener("mousemove", this.mouseMove.bind(this));
     this.setup();
   }
@@ -75,13 +75,13 @@ class PetriPlate {
 
     // draw the petri dish background
     const petriDish = this.two.makeCircle(0, 0, 0.8 * this.two.width / 2);
-    petriDish.fill = '#3F3824';
-    petriDish.stroke = '#909090';
+    petriDish.fill = "#3F3824";
+    petriDish.stroke = "#909090";
     petriDish.linewidth = 4;
 
     const petriInnerLine = this.two.makeCircle(0, 0, 0.925 * petriDish.radius);
-    petriInnerLine.fill = 'transparent';
-    petriInnerLine.stroke = '#635C48';
+    petriInnerLine.fill = "transparent";
+    petriInnerLine.stroke = "#635C48";
     this.petriBackgroundGroup.add(petriDish);
     this.petriBackgroundGroup.add(petriInnerLine);
     this.petriBackgroundGroup.center();
@@ -108,7 +108,7 @@ class PetriPlate {
     this.antibioticDisks = this.antibioticDisks.filter((disk) => !disk.shape._removed);
     // draw the bacteria
     const bacteriaCircle = this.two.makeCircle(0, 0, 0.77 * this.two.width / 2)
-    bacteriaCircle.fill = '#FFD97766';
+    bacteriaCircle.fill = "#FFD97766";
     this.bacteriaGroup.add(bacteriaCircle);
     this.bacteriaGroup.position.x = this.two.width / 2;
     this.bacteriaGroup.position.y = this.two.height / 2;
@@ -122,7 +122,7 @@ class PetriPlate {
     });
     this.antibioticDisks.forEach(disk => {
       const spread = this.two.makeCircle(disk.shape.position.x, disk.shape.position.y, disk.antibiotic.getExpectedRing() * this.millimeterScale);
-      spread.fill = '#3F3824';
+      spread.fill = "#3F3824";
       spread.linewidth = 0;
       this.petriRingGroup.add(spread);
     });
