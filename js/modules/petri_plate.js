@@ -51,6 +51,11 @@ class PetriPlate {
      * @type {Two.Group}
      */
     this.renderGroup = null;
+    /**
+     * Number to scale millimeters by
+     * @type {number}
+     */
+    this.millimeterScale = 1;
     this.two.renderer.domElement.style.backgroundColor = '#000000';
     this.two.renderer.domElement.addEventListener("mousemove", this.mouseMove.bind(this));
     this.setup();
@@ -82,6 +87,8 @@ class PetriPlate {
     this.petriBackgroundGroup.center();
     this.petriBackgroundGroup.position.x = this.two.width / 2;
     this.petriBackgroundGroup.position.y = this.two.height / 2;
+
+    this.millimeterScale = petriDish.radius / 100;
   }
   /**
    * Adds an antibiotic disk to the petri plate
@@ -89,7 +96,7 @@ class PetriPlate {
    */
   addAntibiotic(antibiotic) {
     if (this.started) return;
-    const newDisk = new AntibioticDisk(this.two.width / 2, this.two.height / 2, antibiotic, this.two);
+    const newDisk = new AntibioticDisk(this.two.width / 2, this.two.height / 2, 7 * this.millimeterScale, antibiotic, this.two);
     this.antibioticDisks.push(newDisk)
     this.antibioticDiskGroup.add(newDisk);
   }
@@ -97,6 +104,8 @@ class PetriPlate {
    * Run simulation
    */
   run() {
+    // remove stale antibiotic placements
+    this.antibioticDisks = this.antibioticDisks.filter((disk) => !disk.shape._removed);
     // draw the bacteria
     const bacteriaCircle = this.two.makeCircle(0, 0, 0.77 * this.two.width / 2)
     bacteriaCircle.fill = '#FFD97766';
@@ -105,18 +114,17 @@ class PetriPlate {
     this.bacteriaGroup.position.y = this.two.height / 2;
 
     this.started = true;
-    console.log(this.antibioticDisks)
-    // disable dragging for all antibiotics
+    // disable dragging and removability for all antibiotics
     this.antibioticDisks.forEach(disk => {
       disk.shape.isDragging = false;
       disk.shape.toggleDraggable(false);
+      disk.shape.toggleRemovable(false);
     });
     this.antibioticDisks.forEach(disk => {
-      const spread = this.two.makeCircle(disk.shape.position.x, disk.shape.position.y, disk.antibiotic.getExpectedRing());
+      const spread = this.two.makeCircle(disk.shape.position.x, disk.shape.position.y, disk.antibiotic.getExpectedRing() * this.millimeterScale);
       spread.fill = '#3F3824';
       spread.linewidth = 0;
       this.petriRingGroup.add(spread);
-      console.log(spread);
     });
   }
   /**

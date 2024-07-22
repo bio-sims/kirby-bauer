@@ -16,6 +16,8 @@ class DraggableShape {
     this.shape._renderer.elem.addEventListener("mouseup", this.mouseUp.bind(this));
     this.shape._renderer.elem.addEventListener("mousemove", this.mouseMove.bind(this));
     this.shape._renderer.elem.addEventListener("mouseleave", this.mouseLeave.bind(this));
+    this.shape._renderer.elem.addEventListener("contextmenu", () => {e.preventDefault(); e.stopPropagation();});
+    this.shape.parent._renderer.elem.oncontextmenu = () => false;
 
     /**
      * Whether the shape is currently being dragged
@@ -38,6 +40,17 @@ class DraggableShape {
      * @private
      */
     this._draggable = true;
+    /**
+     * Whether the shape can be right click removed
+     * @type {boolean}
+     * @private
+     */
+    this._removable = true;
+    /**
+     * True if the shape has been deleted from the two.js instance
+     * @type {boolean}
+     */
+    this._removed = false;
 
     this.shape._renderer.elem.style.cursor = "grab";
   }
@@ -84,6 +97,11 @@ class DraggableShape {
    * @param {MouseEvent} e - mouse event
    */
   mouseDown(e) {
+    if (e.button === 2 && this._removable) {
+      this.shape.remove();
+      this._removed = true;
+      return;
+    }
     if (e.button !== 0) {
       return;
     }
@@ -134,6 +152,13 @@ class DraggableShape {
   toggleDraggable(enable = !this._draggable) {
     this._draggable = enable;
     this.shape._renderer.elem.style.cursor = this._draggable ? "grab" : "default";
+  }
+  /**
+   * Toggles the ability to remove the shape
+    * @param {boolean} enable - enable or disable removability, default toggles the current state
+   */
+  toggleRemovable(enable = !this._draggable) {
+    this._removable = enable;
   }
   /**
    * Handles when the mouse leaves the shape, as it's possible for the mouse to leave the shape while dragging
