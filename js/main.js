@@ -1,5 +1,6 @@
-import PetriPlate from './modules/petri_plate.js';
-import { Antibiotic, Ampicillin, Chloramphenicol, Penicillin, Tetracycline } from './modules/antibiotics.js';
+import PetriPlate from "./modules/petri_plate.js";
+import { Antibiotic, Ampicillin, Chloramphenicol, Penicillin, Tetracycline } from "./modules/antibiotics.js";
+import { getThemeIconData, setupTheme, toggleTheme } from "./modules/theme.js";
 
 /**
  * Array of antibiotic classes and amounts
@@ -22,6 +23,8 @@ let mainPetri = null;
  * Initializes the simulation and event listeners
  */
 function main() {
+  setupTheme();
+  document.getElementById("theme-icon-path").setAttribute("d", getThemeIconData());
   mainPetri = new PetriPlate("kirby-sim-container");
 
   // -- temporary fill dropdown with antibiotics --
@@ -32,20 +35,37 @@ function main() {
     dropdown.add(option);
   });
 
-  document.getElementById("run-test-button").addEventListener("click", () => {
-    mainPetri.run();
-  })
-
-  document.getElementById("reset-test-button").addEventListener("click", () => {
-    mainPetri.setup();
-  })
-
   // handle form submission
-  document.getElementById("add-antibiotic-form").addEventListener("submit", (event) => {
-    event.preventDefault();
+  const addAntibioticForm = document.getElementById("add-antibiotic-form");
+  const selectBacteriaForm = document.getElementById("select-bacteria-form")
+
+  addAntibioticForm.addEventListener("submit", (e) => {
+    e.preventDefault();
     const antibioticName = document.getElementById("antibiotic-name").value;
     const antibiotic = antibiotics.find((antibiotic) => antibiotic.class.name === antibioticName);
     mainPetri.addAntibiotic(new antibiotic.class(antibiotic.amount));
+  });
+
+  selectBacteriaForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (mainPetri.started) return;
+    mainPetri.run();
+    // disable adding form
+    addAntibioticForm.querySelectorAll("button, input, select, textarea").forEach((elem) => elem.disabled = true);
+  });
+
+  document.getElementById("reset-test-button").addEventListener("click", (e) => {
+    mainPetri.setup();
+    // enable adding form
+    addAntibioticForm.querySelectorAll("button, input, select, textarea").forEach((elem) => elem.disabled = false);
+  });
+
+  // --- theme events ---
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    toggleTheme();
+    // replace with svg of opposite theme
+    const themeSvgPath = document.getElementById("theme-icon-path");
+    themeSvgPath.setAttribute("d", getThemeIconData());
   });
 }
 

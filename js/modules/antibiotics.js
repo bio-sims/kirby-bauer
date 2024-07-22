@@ -26,7 +26,7 @@ class Antibiotic {
    * @returns {number} radius in mm
    */
   getExpectedRing(bacteria) {
-    return 30;
+    return 0;
   }
   /**
    * Returns the concentration of the antibiotic at a given radius from the center of the paper disk.
@@ -44,6 +44,9 @@ class Ampicillin extends Antibiotic {
     this.name = "Ampicillin";
     this.abbreviation = "AM";
   }
+  getExpectedRing(bacteria) {
+    return 21;
+  }
 }
 
 class Chloramphenicol extends Antibiotic {
@@ -51,6 +54,9 @@ class Chloramphenicol extends Antibiotic {
     super(amount);
     this.name = "Chloramphenicol";
     this.abbreviation = "C";
+  }
+  getExpectedRing(bacteria) {
+    return 24;
   }
 }
 
@@ -60,13 +66,19 @@ class Penicillin extends Antibiotic {
     this.name = "Penicillin";
     this.abbreviation = "P";
   }
+  getExpectedRing(bacteria) {
+    return 9;
+  }
 }
 
 class Tetracycline extends Antibiotic {
   constructor(amount) {
     super(amount);
     this.name = "Tetracycline";
-    this.abbreviation = "Tc";
+    this.abbreviation = "TE";
+  }
+  getExpectedRing(bacteria) {
+    return 22;
   }
 }
 

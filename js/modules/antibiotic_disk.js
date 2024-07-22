@@ -9,9 +9,9 @@ class AntibioticDisk {
    * @param {Antibiotic} antibiotic - antibiotic instance
    * @param {Two} two - Two.js instance
    */
-  constructor(x, y, antibiotic, two) {
+  constructor(x, y, radius, antibiotic, two) {
     this.antibiotic = antibiotic;
-    const circle = two.makeCircle(x, y, 18);
+    const circle = two.makeCircle(x, y, radius);
     const text = two.makeText(antibiotic.abbreviation, x, y);
     const group = two.makeGroup([circle, text]);
     group.center();

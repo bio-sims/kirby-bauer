@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <title>Kirby-Bauer Test</title>
   <meta property="og:title" content="Kirby-Bauer Test">
@@ -9,7 +9,7 @@
   <meta property="og:url" content="https://bio-sims.github.io/kirby-bauer/">
   <meta property="theme-color" content="#a836ff">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=500, initial-scale=1">
   <!-- fonts and css -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,18 +21,80 @@
 </head>
 <body>
   <nav>
-    <h1>Kirby-Bauer Test</h1>
+    <ul>
+      <li class="nav-link">
+        <h1><a href="./">Kirby-Bauer</a></h1>
+      </li>
+      <li class="right-align">
+        <button class="svg-button" id="theme-toggle">
+          <svg viewBox="0 0 24 24">
+              <path id="theme-icon-path" d="" stroke-width="0.1" stroke="currentColor" fill="currentColor"></path>
+          </svg>
+        </button>
+      </li>
+    </ul>
   </nav>
-  <main>
+  <main class="card-container">
     <article id="kirby-sim-container"></article>
-    <!-- temporary -->
-    <form id="add-antibiotic-form">
-      <label for="antibiotic-name">Antibiotic Name:</label>
-      <select id="antibiotic-name" name="antibiotic-name"></select>
-      <button type="submit">Add Antibiotic</button>
-    </form>
-    <button id="run-test-button">Run Test</button>
-    <button id="reset-test-button">Reset Test</button>
+    <div class="card-panel card-panel--side">
+      <section class="card card--side">
+        <h2>Controls</h2>
+        <p>Place antibiotics on the plate and drag to move them around. Right click to remove any antibiotics. Once the bacteria has been plated, the simulation must be reset before antibiotics can be added again</p>
+        <form id="add-antibiotic-form">
+          <div class="input-group">
+            <div class="input group-half">
+                <label for="antibiotic-name">Antibiotic Name</label>
+            </div>
+            <div class="input-group-half">
+                <select id="antibiotic-name" name="antibiotic-name"></select>
+            </div>
+          </div>
+          <button type="submit" id="run-test-button">Add Antibiotic</button>
+        </form>
+        <form id="select-bacteria-form">
+          <div class="input-group">
+            <div class="input group-half">
+                <label for="strain-type">Selected Strain</label>
+            </div>
+            <div class="input-group-half">
+                <select id="strain-type" name="strain-type"></select>
+            </div>
+          </div>
+          <section class="buttons">
+            <button type="submit" id="run-test-button">Plate Bacteria</button>
+            <button type="button" id="reset-test-button">Reset</button>
+          </section>
+        </form>
+      </section>
+      <section class="card card--side">
+        <h2>Table of Susceptibility</h2>
+        <p>TODO</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Antibiotic</th>
+              <th>Resistant</th>
+              <th>Intermediate</th>
+              <th>Susceptibile</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Chloramphenicol (C)</td>
+              <td>≤ 12</td>
+              <td>13-17</td>
+              <td>≥ 18</td>
+            </tr>
+            <tr>
+              <td>Tetracycline (TE)</td>
+              <td>≤ 14</td>
+              <td>15-18</td>
+              <td>≥ 19</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
   </main>
 </body>
 </html>
