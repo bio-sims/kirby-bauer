@@ -16,7 +16,10 @@ class AntibioticDisk {
     const group = two.makeGroup([circle, text]);
     group.center();
     group.translation.set(x, y);
-    this.shape = new DraggableShape(group, two);
+    this.dragShape = new DraggableShape(group, two);
+  }
+  get shape() {
+    return this.dragShape.shape;
   }
 }
 

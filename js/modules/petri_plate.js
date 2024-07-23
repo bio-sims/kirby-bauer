@@ -13,6 +13,11 @@ class PetriPlate {
      */
     this.started = false;
     /**
+     * The bacteria strain that's plated
+     * @type {Object}
+     */
+    this.bacteriaStrain = null;
+    /**
      * The two.js object responsible for rendering the dish
      * @type {Two}
      */
@@ -56,10 +61,13 @@ class PetriPlate {
      * @type {number}
      */
     this.millimeterScale = 1;
-    this.two.renderer.domElement.style.backgroundColor = "#000000";
+    this.two.renderer.domElement.style.backgroundColor = "transparent";
     this.two.renderer.domElement.addEventListener("mousemove", this.mouseMove.bind(this));
     this.setup();
   }
+  /**
+   * Initializes petri dish
+   */
   setup() {
     this.two.clear();
     this.started = false;
@@ -91,6 +99,26 @@ class PetriPlate {
     this.millimeterScale = petriDish.radius / 100;
   }
   /**
+   * Removes bacteria and resets simulation
+   * @param {boolean} keepDisks - if true, antibiotics won't be destroyed
+   */
+  reset(keepDisks = false) {
+    this.started = false;
+    this.bacteriaGroup.remove(this.bacteriaGroup.children);
+    this.petriRingGroup.remove(this.petriRingGroup.children);
+    this.bacteriaStrain = null;
+    if (!keepDisks) {
+      console.log(this.antibioticDiskGroup.children);
+      this.antibioticDiskGroup.remove(this.antibioticDiskGroup.children);
+      this.antibioticDisks = [];
+    } else {
+      this.antibioticDisks.forEach(disk => {
+        disk.dragShape.toggleDraggable(true);
+        disk.dragShape.toggleRemovable(true);
+      });
+    }
+  }
+  /**
    * Adds an antibiotic disk to the petri plate
    * @param {Antibiotic} antibiotic - antibiotic to add to the petri plate
    */
@@ -98,14 +126,17 @@ class PetriPlate {
     if (this.started) return;
     const newDisk = new AntibioticDisk(this.two.width / 2, this.two.height / 2, 7 * this.millimeterScale, antibiotic, this.two);
     this.antibioticDisks.push(newDisk)
-    this.antibioticDiskGroup.add(newDisk);
+    this.antibioticDiskGroup.add(newDisk.shape);
   }
   /**
    * Run simulation
    */
   run() {
     // remove stale antibiotic placements
-    this.antibioticDisks = this.antibioticDisks.filter((disk) => !disk.shape._removed);
+    this.antibioticDisks = this.antibioticDisks.filter((disk) => !disk.dragShape._removed);
+    this.started = true;
+    // don't plate if no bacteria
+    if (!this.bacteriaStrain) return;
     // draw the bacteria
     const bacteriaCircle = this.two.makeCircle(0, 0, 0.77 * this.two.width / 2)
     bacteriaCircle.fill = "#FFD97766";
@@ -113,15 +144,18 @@ class PetriPlate {
     this.bacteriaGroup.position.x = this.two.width / 2;
     this.bacteriaGroup.position.y = this.two.height / 2;
 
-    this.started = true;
     // disable dragging and removability for all antibiotics
     this.antibioticDisks.forEach(disk => {
-      disk.shape.isDragging = false;
-      disk.shape.toggleDraggable(false);
-      disk.shape.toggleRemovable(false);
+      disk.dragShape.isDragging = false;
+      disk.dragShape.toggleDraggable(false);
+      disk.dragShape.toggleRemovable(false);
     });
     this.antibioticDisks.forEach(disk => {
-      const spread = this.two.makeCircle(disk.shape.position.x, disk.shape.position.y, disk.antibiotic.getExpectedRing() * this.millimeterScale);
+      const spread = this.two.makeCircle(
+        disk.dragShape.position.x,
+        disk.dragShape.position.y,
+        disk.antibiotic.getExpectedRing(this.bacteriaStrain) * this.millimeterScale
+      );
       spread.fill = "#3F3824";
       spread.linewidth = 0;
       this.petriRingGroup.add(spread);
@@ -136,8 +170,8 @@ class PetriPlate {
       return;
     }
     this.antibioticDisks.forEach(antibiotic => {
-      if (antibiotic.shape.isDragging) {
-        antibiotic.shape.mouseMove(e);
+      if (antibiotic.dragShape.isDragging) {
+        antibiotic.dragShape.mouseMove(e);
       }
     });
   }

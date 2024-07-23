@@ -39,25 +39,33 @@
     <div class="card-panel card-panel--side">
       <section class="card card--side">
         <h2>Controls</h2>
-        <p>Place antibiotics on the plate and drag to move them around. Right click to remove any antibiotics. Once the bacteria has been plated, the simulation must be reset before antibiotics can be added again</p>
+        <p>Place antibiotics on the plate and drag to move them around. Right click to remove any antibiotics. Once the bacteria has been plated, the simulation must be reset before antibiotics can be added/removed again</p>
         <form id="add-antibiotic-form">
           <div class="input-group">
             <div class="input group-half">
-                <label for="antibiotic-name">Antibiotic Name</label>
+                <label for="antibiotic-name">Antibiotic name</label>
             </div>
             <div class="input-group-half">
                 <select id="antibiotic-name" name="antibiotic-name"></select>
             </div>
           </div>
-          <button type="submit" id="run-test-button">Add Antibiotic</button>
+          <button type="submit">Add antibiotic</button>
         </form>
         <form id="select-bacteria-form">
           <div class="input-group">
             <div class="input group-half">
-                <label for="strain-type">Selected Strain</label>
+                <label for="strain-type">Selected strain</label>
             </div>
             <div class="input-group-half">
                 <select id="strain-type" name="strain-type"></select>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input group-half">
+                <label for="do-hard-reset">Remove antibiotics on reset</label>
+            </div>
+            <div class="input-group-half right-align">
+                <input type="checkbox" id="do-hard-reset" name="do-hard-reset">
             </div>
           </div>
           <section class="buttons">

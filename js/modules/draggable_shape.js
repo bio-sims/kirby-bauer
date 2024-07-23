@@ -16,7 +16,7 @@ class DraggableShape {
     this.shape._renderer.elem.addEventListener("mouseup", this.mouseUp.bind(this));
     this.shape._renderer.elem.addEventListener("mousemove", this.mouseMove.bind(this));
     this.shape._renderer.elem.addEventListener("mouseleave", this.mouseLeave.bind(this));
-    this.shape._renderer.elem.addEventListener("contextmenu", () => {e.preventDefault(); e.stopPropagation();});
+    this.shape._renderer.elem.addEventListener("contextmenu", (e) => {e.preventDefault(); e.stopPropagation();});
     this.shape.parent._renderer.elem.oncontextmenu = () => false;
 
     /**
