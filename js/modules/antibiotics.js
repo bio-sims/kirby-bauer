@@ -22,7 +22,7 @@ class Antibiotic {
   }
   /**
    * Returns the expected zone of inhibition radius for a given bacteria environment.
-   * @param {Bacteria} bacteria - the bacteria object the antibiotic is placed near/on
+   * @param {Object} bacteria - the bacteria object the antibiotic is placed near/on
    * @returns {number} radius in mm
    */
   getExpectedRing(bacteria) {
@@ -36,6 +36,14 @@ class Antibiotic {
   getConcentration(radius) {
     return 10;
   }
+  /**
+   * Get the table of susceptibility for the antibiotic (rings of inhibition).
+   * @param {Object} bacteria - the bacteria object to get the susceptibility for
+   */
+  getSusceptibility(bacteria) {
+    // for each possible bacteria, return the susceptibility
+    return { "resistant": 0, "susceptible": 0 }
+  }
 }
 
 class Ampicillin extends Antibiotic {
@@ -45,7 +53,20 @@ class Ampicillin extends Antibiotic {
     this.abbreviation = "AM";
   }
   getExpectedRing(bacteria) {
-    return 21;
+    switch (bacteria.name) {
+      case "Escherichia coli":
+        return 21;
+      default:
+        super.getExpectedRing(bacteria);
+    }
+  }
+  getSusceptibility(bacteria) {
+    switch (bacteria.name) {
+      case "Escherichia coli":
+        return { "resistant": 11, "susceptible": 14 };
+      default:
+        super.getSusceptibility(bacteria);
+    }
   }
 }
 
@@ -56,7 +77,21 @@ class Chloramphenicol extends Antibiotic {
     this.abbreviation = "C";
   }
   getExpectedRing(bacteria) {
-    return 24;
+    console.log(bacteria);
+    switch (bacteria.name) {
+      case "Escherichia coli":
+        return 24;
+      default:
+        super.getExpectedRing(bacteria);
+    }
+  }
+  getSusceptibility(bacteria) {
+    switch (bacteria.name) {
+      case "Escherichia coli":
+        return { "resistant": 12, "susceptible": 18 };
+      default:
+        super.getSusceptibility(bacteria);
+    }
   }
 }
 
@@ -67,7 +102,20 @@ class Penicillin extends Antibiotic {
     this.abbreviation = "P";
   }
   getExpectedRing(bacteria) {
-    return 9;
+    switch (bacteria.name) {
+      case "Escherichia coli":
+        return 9;
+      default:
+        super.getExpectedRing(bacteria);
+    }
+  }
+  getSusceptibility(bacteria) {
+    switch (bacteria.name) {
+      case "Escherichia coli":
+        return { "resistant": 20, "susceptible": 29 };
+      default:
+        super.getSusceptibility(bacteria);
+    }
   }
 }
 
@@ -78,7 +126,20 @@ class Tetracycline extends Antibiotic {
     this.abbreviation = "TE";
   }
   getExpectedRing(bacteria) {
-    return 22;
+    switch (bacteria.name) {
+      case "Escherichia coli":
+        return 22;
+      default:
+        super.getExpectedRing(bacteria);
+    }
+  }
+  getSusceptibility(bacteria) {
+    switch (bacteria.name) {
+      case "Escherichia coli":
+        return { "resistant": 14, "susceptible": 19 };
+      default:
+        super.getSusceptibility(bacteria);
+    }
   }
 }
 
