@@ -20,6 +20,47 @@ const antibiotics = [
  */
 let mainPetri = null;
 
+function updateSusceptibilityTable() {
+  // get unique antibiotics on the platter, this currently assumes amount is irrelevant (which, right now it is)
+  const currentAntibiotics = mainPetri.antibioticDisks.reduce((acc, disk) => {
+    if (!acc.some((antibiotic) => antibiotic.name === disk.antibiotic.name)) {
+      acc.push(disk.antibiotic);
+    }
+    return acc;
+  }, []);
+  // sort alphabetically
+  currentAntibiotics.sort((a, b) => a.name.localeCompare(b.name));
+  // get the selected bacteria
+  const bacteriaType = document.getElementById("strain-type").value;
+  const bacteriaObj = bacteria[bacteriaType];
+  // get the table body
+  const tableBody = document.getElementById("susceptibility-table-body");
+  tableBody.innerHTML = "";
+  // fill in the table
+  if (!bacteria || currentAntibiotics.length === 0) {
+    const row = tableBody.insertRow();
+    row.insertCell().textContent = `No data`;
+    row.insertCell().textContent = "-";
+    row.insertCell().textContent = "-";
+    row.insertCell().textContent = "-";
+  } else {
+    currentAntibiotics.forEach((antibiotic) => {
+      const susceptibility = antibiotic.getSusceptibility(bacteriaObj);
+      const row = tableBody.insertRow();
+      row.insertCell().textContent = `${antibiotic.name} (${antibiotic.abbreviation})`;
+      row.insertCell().textContent = `≤ ${susceptibility.resistant}`;
+      if (susceptibility.susceptible === susceptibility.resistant) {
+        row.insertCell().textContent = `${susceptibility.susceptible}`;
+      } else if (susceptibility.susceptible === 0) {
+        row.insertCell().textContent = `0`;
+      } else {
+        row.insertCell().textContent = `${susceptibility.resistant + 1}-${susceptibility.susceptible}`;
+      }
+      row.insertCell().textContent = `≥ ${susceptibility.susceptible}`;
+    });
+  }
+}
+
 /**
  * Initializes the simulation and event listeners
  */
@@ -44,15 +85,13 @@ function main() {
     strainType.add(option);
   });
 
-  // handle form submission
-  const addAntibioticForm = document.getElementById("add-antibiotic-form");
   const selectBacteriaForm = document.getElementById("select-bacteria-form")
 
-  addAntibioticForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+  document.getElementById("add-antibiotic-button").addEventListener("click", (e) => {
     const antibioticName = document.getElementById("antibiotic-name").value;
     const antibiotic = antibiotics.find((antibiotic) => antibiotic.class.name === antibioticName);
     mainPetri.addAntibiotic(new antibiotic.class(antibiotic.amount));
+    updateSusceptibilityTable();
   });
 
   selectBacteriaForm.addEventListener("submit", (e) => {
@@ -66,16 +105,21 @@ function main() {
     // disable bacteria form
     document.getElementById("run-test-button").disabled = true;
     document.getElementById("strain-type").disabled = true;
-    // disable adding form
-    addAntibioticForm.querySelectorAll("button, input, select, textarea").forEach((elem) => elem.disabled = true);
+    document.getElementById("reset-test-button").disabled = false;
+    document.getElementById("antibiotic-name").disabled = true;
+    document.getElementById("add-antibiotic-button").disabled = true;
   });
 
   document.getElementById("reset-test-button").addEventListener("click", (e) => {
     mainPetri.reset(!document.getElementById("do-hard-reset").checked);
-    document.getElementById("run-test-button").disabled = false;
     // enable forms
-    addAntibioticForm.querySelectorAll("button, input, select, textarea").forEach((elem) => elem.disabled = false);
-    selectBacteriaForm.querySelectorAll("input, select, textarea").forEach((elem) => elem.disabled = false);
+    selectBacteriaForm.querySelectorAll("button, input, select, textarea").forEach((elem) => elem.disabled = false);
+
+    updateSusceptibilityTable();
+  });
+
+  document.getElementById("strain-type").addEventListener("change", (e) => {
+    updateSusceptibilityTable();
   });
 
   // --- theme events ---
@@ -85,6 +129,8 @@ function main() {
     const themeSvgPath = document.getElementById("theme-icon-path");
     themeSvgPath.setAttribute("d", getThemeIconData());
   });
+
+  updateSusceptibilityTable();
 }
 
 main();

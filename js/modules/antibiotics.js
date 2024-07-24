@@ -57,7 +57,7 @@ class Ampicillin extends Antibiotic {
       case "Escherichia coli":
         return 21;
       default:
-        super.getExpectedRing(bacteria);
+        return super.getExpectedRing(bacteria);
     }
   }
   getSusceptibility(bacteria) {
@@ -65,7 +65,7 @@ class Ampicillin extends Antibiotic {
       case "Escherichia coli":
         return { "resistant": 11, "susceptible": 14 };
       default:
-        super.getSusceptibility(bacteria);
+        return super.getSusceptibility(bacteria);
     }
   }
 }
@@ -77,12 +77,11 @@ class Chloramphenicol extends Antibiotic {
     this.abbreviation = "C";
   }
   getExpectedRing(bacteria) {
-    console.log(bacteria);
     switch (bacteria.name) {
       case "Escherichia coli":
         return 24;
       default:
-        super.getExpectedRing(bacteria);
+        return super.getExpectedRing(bacteria);
     }
   }
   getSusceptibility(bacteria) {
@@ -90,7 +89,7 @@ class Chloramphenicol extends Antibiotic {
       case "Escherichia coli":
         return { "resistant": 12, "susceptible": 18 };
       default:
-        super.getSusceptibility(bacteria);
+        return super.getSusceptibility(bacteria);
     }
   }
 }
@@ -106,7 +105,7 @@ class Penicillin extends Antibiotic {
       case "Escherichia coli":
         return 9;
       default:
-        super.getExpectedRing(bacteria);
+        return super.getExpectedRing(bacteria);
     }
   }
   getSusceptibility(bacteria) {
@@ -114,7 +113,7 @@ class Penicillin extends Antibiotic {
       case "Escherichia coli":
         return { "resistant": 20, "susceptible": 29 };
       default:
-        super.getSusceptibility(bacteria);
+        return super.getSusceptibility(bacteria);
     }
   }
 }
@@ -130,7 +129,7 @@ class Tetracycline extends Antibiotic {
       case "Escherichia coli":
         return 22;
       default:
-        super.getExpectedRing(bacteria);
+        return super.getExpectedRing(bacteria);
     }
   }
   getSusceptibility(bacteria) {
@@ -138,7 +137,7 @@ class Tetracycline extends Antibiotic {
       case "Escherichia coli":
         return { "resistant": 14, "susceptible": 19 };
       default:
-        super.getSusceptibility(bacteria);
+        return super.getSusceptibility(bacteria);
     }
   }
 }
