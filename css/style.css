@@ -208,6 +208,7 @@ form > .input-group {
 }
 
 form > .input-group:last-of-type {
+  border-bottom: 1px solid var(--cr-border-primary);
   margin-bottom: 1rem;
 }
 
@@ -254,7 +255,6 @@ form > .input-group output {
 }
 
 select, input[type="number"], input[type="text"] {
-  width: 100%;
   padding: 0.5rem;
   border: 2px solid var(--cr-border-primary);
   border-radius: var(--br-radius-small);
@@ -317,6 +317,10 @@ input[type="checkbox"]:disabled {
 
 input[type="checkbox"]:disabled::before {
   background-color: #8E8E93;
+}
+
+select:disabled {
+  cursor: not-allowed;
 }
 
 main.card-container {
@@ -385,8 +389,7 @@ table {
   display: table;
   border-spacing: 0;
   border-collapse: collapse;
-  display: block;
-  max-width: 100%;
+  width: 100%;
   overflow: auto;
   margin-top: 0;
 }
@@ -398,7 +401,12 @@ table {
 }
 
 table th {
+  text-align: start;
   font-weight: 600;
+}
+
+table th.spanning {
+  text-align: center;
 }
 
 @media (width >= 600px) {
@@ -426,6 +434,18 @@ table tr td:first-child {
   width: max-content;
 }
 
-table tr:nth-child(2n) {
+table tbody tr:nth-child(2n + 1) {
   background-color: var(--cr-bg-primary);
+}
+
+#susceptibility-table tbody tr td:first-child {
+  width: 50%;
+}
+
+#susceptibility-table thead tr:first-child th:first-child {
+  border-right-color: var(--cr-bg-secondary);
+}
+
+#susceptibility-table thead tr:first-child th:nth-child(2) {
+  border-left-color: var(--cr-bg-secondary);
 }

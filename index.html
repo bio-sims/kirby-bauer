@@ -40,23 +40,21 @@
       <section class="card card--side">
         <h2>Controls</h2>
         <p>Place antibiotics on the plate and drag to move them around. Right click to remove any antibiotics. Once the bacteria has been plated, the simulation must be reset before antibiotics can be added/removed again</p>
-        <form id="add-antibiotic-form">
+        <form id="select-bacteria-form">
           <div class="input-group">
             <div class="input group-half">
                 <label for="antibiotic-name">Antibiotic name</label>
             </div>
-            <div class="input-group-half">
+            <div class="input-group-half right-align">
                 <select id="antibiotic-name" name="antibiotic-name"></select>
+                <button type="button" id="add-antibiotic-button">Add</button>
             </div>
           </div>
-          <button type="submit">Add antibiotic</button>
-        </form>
-        <form id="select-bacteria-form">
           <div class="input-group">
             <div class="input group-half">
                 <label for="strain-type">Selected strain</label>
             </div>
-            <div class="input-group-half">
+            <div class="input-group-half right-align">
                 <select id="strain-type" name="strain-type"></select>
             </div>
           </div>
@@ -76,9 +74,12 @@
       </section>
       <section class="card card--side">
         <h2>Table of Susceptibility</h2>
-        <p>TODO</p>
-        <table>
+        <table id="susceptibility-table">
           <thead>
+            <tr>
+              <th></th>
+              <th colspan="3" class="spanning">Zone of Inhibition (mm)</th>
+            </tr>
             <tr>
               <th>Antibiotic</th>
               <th>Resistant</th>
@@ -86,7 +87,7 @@
               <th>Susceptibile</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="susceptibility-table-body">
             <tr>
               <td>Chloramphenicol (C)</td>
               <td>≤ 12</td>

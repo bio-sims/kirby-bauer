@@ -108,7 +108,6 @@ class PetriPlate {
     this.petriRingGroup.remove(this.petriRingGroup.children);
     this.bacteriaStrain = null;
     if (!keepDisks) {
-      console.log(this.antibioticDiskGroup.children);
       this.antibioticDiskGroup.remove(this.antibioticDiskGroup.children);
       this.antibioticDisks = [];
     } else {
