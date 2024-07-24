@@ -1,5 +1,6 @@
 import Two from "https://cdn.jsdelivr.net/npm/two.js/+esm";
 import AntibioticDisk from "./antibiotic_disk.js";
+import Ruler from "./ruler.js";
 
 /**
  * Renders and manages a petri plate with bacteria and antibiotics
@@ -52,6 +53,16 @@ class PetriPlate {
      */
     this.petriRingGroup = null;
     /**
+     * Draggable ruler object
+     * @type {Ruler}
+     */
+    this.rulerWrapper = null;
+    /**
+     * Layer for the ruler graphic
+     * @type {Two.Group}
+     */
+    this.rulerGroup = null;
+    /**
      * Group that orders all the layers
      * @type {Two.Group}
      */
@@ -76,7 +87,8 @@ class PetriPlate {
     this.petriBackgroundGroup = this.two.makeGroup();
     this.bacteriaGroup = this.two.makeGroup();
     this.petriRingGroup = this.two.makeGroup();
-    this.renderGroup = this.two.makeGroup([this.petriBackgroundGroup, this.bacteriaGroup, this.petriRingGroup, this.antibioticDiskGroup]);
+    this.rulerGroup = this.two.makeGroup();
+    this.renderGroup = this.two.makeGroup([this.petriBackgroundGroup, this.bacteriaGroup, this.petriRingGroup, this.antibioticDiskGroup, this.rulerGroup]);
 
     // TODO: mask on mask grouping does not work
     this.bacteriaGroup.mask = this.petriRingGroup;
@@ -97,6 +109,10 @@ class PetriPlate {
     this.petriBackgroundGroup.position.y = this.two.height / 2;
 
     this.millimeterScale = petriDish.radius / 100;
+
+    // draw the ruler
+    this.rulerWrapper = new Ruler(this.millimeterScale * 25 + 5, this.millimeterScale * 10 + 5, 50, 10, this.millimeterScale, this.two);
+    this.rulerGroup = this.rulerWrapper.shape;
   }
   /**
    * Removes bacteria and resets simulation
@@ -173,6 +189,9 @@ class PetriPlate {
         antibiotic.dragShape.mouseMove(e);
       }
     });
+    if (this.rulerWrapper.dragShape.isDragging) {
+      this.rulerWrapper.dragShape.mouseMove(e);
+    }
   }
 }
 
