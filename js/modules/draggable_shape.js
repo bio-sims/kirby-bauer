@@ -13,8 +13,11 @@ class DraggableShape {
 
     two.update(); // ensures passed shape exists on the dom
     this.shape._renderer.elem.addEventListener("mousedown", this.mouseDown.bind(this));
+    this.shape._renderer.elem.addEventListener("touchstart", this.touchStart.bind(this));
     this.shape._renderer.elem.addEventListener("mouseup", this.mouseUp.bind(this));
+    this.shape._renderer.elem.addEventListener("touchend", this.touchEnd.bind(this));
     this.shape._renderer.elem.addEventListener("mousemove", this.mouseMove.bind(this));
+    this.shape._renderer.elem.addEventListener("touchmove", this.touchMove.bind(this));
     this.shape._renderer.elem.addEventListener("mouseleave", this.mouseLeave.bind(this));
     this.shape._renderer.elem.addEventListener("contextmenu", (e) => {e.preventDefault(); e.stopPropagation();});
     this.shape.parent._renderer.elem.oncontextmenu = () => false;
@@ -81,6 +84,16 @@ class DraggableShape {
     };
   }
   /**
+   * Gives coordinates of the touch event relative to the two.js instance
+   * @param {TouchEvent} e - touch event
+   * @returns {Object} - x and y position of the click event
+   */
+  getTouchPosition(e) {
+    console.log(e);
+    const touch = e.touches[0] || e.changedTouches[0];
+    return this.getClickPosition({ clientX: touch.pageX, clientY: touch.pageY });
+  }
+  /**
    * Provide position to move the shape to based on the click event
    * @param {MouseEvent} e - mouse event
    * @returns {Object} - x and y offset from the shape's position
@@ -91,6 +104,15 @@ class DraggableShape {
     const clickOffsetX = clickPosition.x - position.x;
     const clickOffsetY = clickPosition.y - position.y;
     return { x: clickOffsetX, y: clickOffsetY };
+  }
+  /**
+   * Provide position to move the shape to based on the touch event
+   * @param {TouchEvent} e - touch event
+   * @returns {Object} - x and y offset from the shape's position
+   */
+  calculateTouchOffset(e) {
+    const touch = e.touches[0] || e.changedTouches[0];
+    return this.calculateClickOffset({ clientX: touch.pageX, clientY: touch.pageY });
   }
   /**
    * Handles when the shape is left-clicked
@@ -143,6 +165,40 @@ class DraggableShape {
       const translatePosition = { x: clickPosition.x - this.clickOffset.x, y: clickPosition.y - this.clickOffset.y };
       this.shape.translation.set(translatePosition.x, translatePosition.y);
       this._lastMousePosition = clickPosition;
+    }
+  }
+  /**
+   * Handles when the shape is touched
+   * @param {TouchEvent} e - touch event
+   */
+  touchStart(e) {
+    if (!this._draggable) {
+      this.isDragging = false;
+      return;
+    }
+    this.isDragging = true;
+    this.clickOffset = this.calculateTouchOffset(e);
+  }
+  /**
+   * Handles when the shape is released
+   * @param {TouchEvent} e - touch event
+   */
+  touchEnd(e) {
+    this.isDragging = false;
+  }
+  /**
+   * Handles when the touch gesture is moved over the shape while dragging
+   * @param {TouchEvent} e - touch event
+   */
+  touchMove(e) {
+    if (!this._draggable) {
+      return;
+    }
+    if (this.isDragging) {
+      const touchPosition = this.getTouchPosition(e);
+      const translatePosition = { x: touchPosition.x - this.clickOffset.x, y: touchPosition.y - this.clickOffset.y };
+      this.shape.translation.set(translatePosition.x, translatePosition.y);
+      this._lastMousePosition = touchPosition;
     }
   }
   /**
