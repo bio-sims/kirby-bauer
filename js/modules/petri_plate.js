@@ -74,6 +74,7 @@ class PetriPlate {
     this.millimeterScale = 1;
     this.two.renderer.domElement.style.backgroundColor = "transparent";
     this.two.renderer.domElement.addEventListener("mousemove", this.mouseMove.bind(this));
+    this.two.renderer.domElement.addEventListener("touchmove", this.mouseMove.bind(this));
     this.setup();
   }
   /**
@@ -191,6 +192,16 @@ class PetriPlate {
     });
     if (this.rulerWrapper.dragShape.isDragging) {
       this.rulerWrapper.dragShape.mouseMove(e);
+    }
+  }
+  touchMove(e) {
+    this.antibioticDisks.forEach(antibiotic => {
+      if (antibiotic.dragShape.isDragging) {
+        antibiotic.dragShape.touchMove(e);
+      }
+    });
+    if (this.rulerWrapper.dragShape.isDragging) {
+      this.rulerWrapper.dragShape.touchMove(e);
     }
   }
 }

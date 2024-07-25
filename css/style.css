@@ -115,6 +115,7 @@ body {
 
 svg {
   user-select: none;
+  touch-action: none;
 }
 
 nav {
