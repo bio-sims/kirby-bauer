@@ -73,8 +73,6 @@ class PetriPlate {
      */
     this.millimeterScale = 1;
     this.two.renderer.domElement.style.backgroundColor = "transparent";
-    this.two.renderer.domElement.addEventListener("mousemove", this.mouseMove.bind(this));
-    this.two.renderer.domElement.addEventListener("touchmove", this.mouseMove.bind(this));
     this.setup();
   }
   /**
@@ -176,33 +174,6 @@ class PetriPlate {
       spread.linewidth = 0;
       this.petriRingGroup.add(spread);
     });
-  }
-  /**
-   * Ensures any antibiotics that are supposed to be dragged are updated properly
-   * @param {MouseEvent} e - mouse event
-   */
-  mouseMove(e) {
-    if (e.buttons !== 1) {
-      return;
-    }
-    this.antibioticDisks.forEach(antibiotic => {
-      if (antibiotic.dragShape.isDragging) {
-        antibiotic.dragShape.mouseMove(e);
-      }
-    });
-    if (this.rulerWrapper.dragShape.isDragging) {
-      this.rulerWrapper.dragShape.mouseMove(e);
-    }
-  }
-  touchMove(e) {
-    this.antibioticDisks.forEach(antibiotic => {
-      if (antibiotic.dragShape.isDragging) {
-        antibiotic.dragShape.touchMove(e);
-      }
-    });
-    if (this.rulerWrapper.dragShape.isDragging) {
-      this.rulerWrapper.dragShape.touchMove(e);
-    }
   }
 }
 
