@@ -90,7 +90,7 @@ class PetriPlate {
     this.renderGroup = this.two.makeGroup([this.petriBackgroundGroup, this.bacteriaGroup, this.petriRingGroup, this.antibioticDiskGroup, this.rulerGroup]);
 
     // TODO: mask on mask grouping does not work
-    this.bacteriaGroup.mask = this.petriRingGroup;
+    // this.bacteriaGroup.mask = this.petriRingGroup;
 
     // draw the petri dish background
     const petriDish = this.two.makeCircle(0, 0, 0.8 * this.two.width / 2);
@@ -112,6 +112,15 @@ class PetriPlate {
     // draw the ruler
     this.rulerWrapper = new Ruler(this.millimeterScale * 25 + 5, this.millimeterScale * 10 + 5, 50, 10, this.millimeterScale, this.two);
     this.rulerGroup = this.rulerWrapper.shape;
+
+    // mask the ring group with a circle (matches bacteria circle)
+    const mask = this.two.makeCircle(0, 0, 0.77 * this.two.width / 2);
+    mask.fill = "#FFFFFF";
+    mask.linewidth = 0;
+    // center the mask
+    mask.position.x = this.two.width / 2;
+    mask.position.y = this.two.height / 2;
+    this.petriRingGroup.mask = mask;
   }
   /**
    * Removes bacteria and resets simulation
@@ -165,6 +174,8 @@ class PetriPlate {
       disk.dragShape.toggleRemovable(false);
     });
     this.antibioticDisks.forEach(disk => {
+      // if the antibiotic is outside the dish, skip
+      if (disk.dragShape.position.distanceTo(this.bacteriaGroup.position) > 0.8 * this.two.width / 2) return;
       const spread = this.two.makeCircle(
         disk.dragShape.position.x,
         disk.dragShape.position.y,
