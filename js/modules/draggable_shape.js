@@ -84,7 +84,6 @@ class DraggableShape {
    * @returns {Object} - x and y position of the click event
    */
   getTouchPosition(e) {
-    console.log(e);
     const touch = e.touches[0] || e.changedTouches[0];
     return this.getClickPosition({ clientX: touch.pageX, clientY: touch.pageY });
   }
