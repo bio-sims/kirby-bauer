@@ -79,6 +79,7 @@ class PetriPlate {
    * Initializes petri dish
    */
   setup() {
+    this.two.unbind("update");
     this.two.clear();
     this.started = false;
     this.antibioticDisks = [];
@@ -127,18 +128,18 @@ class PetriPlate {
    * @param {boolean} keepDisks - if true, antibiotics won't be destroyed
    */
   reset(keepDisks = false) {
-    this.started = false;
-    this.bacteriaGroup.remove(this.bacteriaGroup.children);
-    this.petriRingGroup.remove(this.petriRingGroup.children);
-    this.bacteriaStrain = null;
-    if (!keepDisks) {
-      this.antibioticDiskGroup.remove(this.antibioticDiskGroup.children);
-      this.antibioticDisks = [];
-    } else {
-      this.antibioticDisks.forEach(disk => {
-        disk.dragShape.toggleDraggable(true);
-        disk.dragShape.toggleRemovable(true);
+    if (keepDisks) {
+      // save position and antibiotic of each disk
+      const oldDisks = this.antibioticDisks.map(disk => ({ position: disk.dragShape.position, antibiotic: disk.antibiotic }));
+      this.setup();
+      // re-add disks
+      oldDisks.forEach(disk => {
+        const newDisk = new AntibioticDisk(disk.position.x, disk.position.y, 7 * this.millimeterScale, disk.antibiotic, this.two);
+        this.antibioticDisks.push(newDisk)
+        this.antibioticDiskGroup.add(newDisk.shape);
       });
+    } else {
+      this.setup();
     }
   }
   /**
@@ -176,15 +177,37 @@ class PetriPlate {
     this.antibioticDisks.forEach(disk => {
       // if the antibiotic is outside the dish, skip
       if (disk.dragShape.position.distanceTo(this.bacteriaGroup.position) > 0.8 * this.two.width / 2) return;
+      const expectedRing = disk.antibiotic.getExpectedRing(this.bacteriaStrain) * this.millimeterScale;
       const spread = this.two.makeCircle(
         disk.dragShape.position.x,
         disk.dragShape.position.y,
-        disk.antibiotic.getExpectedRing(this.bacteriaStrain) * this.millimeterScale
+        0,
       );
       spread.fill = "#3F3824";
       spread.linewidth = 0;
+      spread.radius = 0;
+      spread.maxRadius = expectedRing;
       this.petriRingGroup.add(spread);
     });
+
+    // animate the bacteria and rings
+    this.two.bind("update", update);
+    this.two.play();
+
+    this.bacteriaGroup.opacity = 0;
+    const animationDuration = 1500;
+    const initialFrameCount = this.two.frameCount;
+
+    let self = this;
+    function update(frameCount) {
+      self.bacteriaGroup.opacity = Math.min(1, self.bacteriaGroup.opacity + 1 / animationDuration);
+      self.petriRingGroup.children.forEach((ring) => {
+        ring.radius = Math.min(ring.maxRadius, ring.radius + ring.maxRadius / animationDuration);
+      });
+      if (self.two.frameCount - initialFrameCount > animationDuration) {
+        self.two.unbind("update");
+      }
+    }
   }
 }
 
