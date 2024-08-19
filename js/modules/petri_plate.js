@@ -27,6 +27,7 @@ class PetriPlate {
       height: 500,
       autostart: true
     }).appendTo(document.getElementById(containerId));
+    this.two.originalHeight = this.two.height;
     /**
      * List of antibiotic disks on the dish
      * @type {Array<AntibioticDisk>}
@@ -88,8 +89,6 @@ class PetriPlate {
     this.bacteriaGroup = this.two.makeGroup();
     this.petriRingGroup = this.two.makeGroup();
     this.rulerGroup = this.two.makeGroup();
-    this.renderGroup = this.two.makeGroup([this.petriBackgroundGroup, this.bacteriaGroup, this.petriRingGroup, this.antibioticDiskGroup, this.rulerGroup]);
-
     // TODO: mask on mask grouping does not work
     // this.bacteriaGroup.mask = this.petriRingGroup;
 
@@ -122,21 +121,22 @@ class PetriPlate {
     mask.position.x = this.two.width / 2;
     mask.position.y = this.two.height / 2;
     this.petriRingGroup.mask = mask;
+    this.renderGroup = this.two.makeGroup([this.petriBackgroundGroup, this.bacteriaGroup, this.petriRingGroup, this.antibioticDiskGroup, this.rulerGroup]);
   }
   /**
    * Removes bacteria and resets simulation
    * @param {boolean} keepDisks - if true, antibiotics won't be destroyed
    */
   reset(keepDisks = false) {
+    this.two.unbind("update");
     if (keepDisks) {
-      // save position and antibiotic of each disk
-      const oldDisks = this.antibioticDisks.map(disk => ({ position: disk.dragShape.position, antibiotic: disk.antibiotic }));
-      this.setup();
-      // re-add disks
-      oldDisks.forEach(disk => {
-        const newDisk = new AntibioticDisk(disk.position.x, disk.position.y, 7 * this.millimeterScale, disk.antibiotic, this.two);
-        this.antibioticDisks.push(newDisk)
-        this.antibioticDiskGroup.add(newDisk.shape);
+      this.bacteriaGroup.remove(...this.bacteriaGroup.children);
+      this.petriRingGroup.remove(...this.petriRingGroup.children);
+      this.bacteriaStrain = null;
+      this.started = false;
+      this.antibioticDisks.forEach(disk => {
+        disk.dragShape.toggleDraggable(true);
+        disk.dragShape.toggleRemovable(true);
       });
     } else {
       this.setup();
@@ -148,7 +148,7 @@ class PetriPlate {
    */
   addAntibiotic(antibiotic) {
     if (this.started) return;
-    const newDisk = new AntibioticDisk(this.two.width / 2, this.two.height / 2, 7 * this.millimeterScale, antibiotic, this.two);
+    const newDisk = new AntibioticDisk((this.two.width / 2) / this.scale, (this.two.height / 2) / this.scale, 7 * this.millimeterScale, antibiotic, this.two);
     this.antibioticDisks.push(newDisk)
     this.antibioticDiskGroup.add(newDisk.shape);
   }
@@ -162,11 +162,12 @@ class PetriPlate {
     // don't plate if no bacteria
     if (!this.bacteriaStrain) return;
     // draw the bacteria
-    const bacteriaCircle = this.two.makeCircle(0, 0, 0.77 * this.two.width / 2)
+    console.log(this.two.width);
+    const bacteriaCircle = this.two.makeCircle(0, 0, 0.77 * this.two.width / 2 / this.scale);
     bacteriaCircle.fill = "#FFD97766";
     this.bacteriaGroup.add(bacteriaCircle);
-    this.bacteriaGroup.position.x = this.two.width / 2;
-    this.bacteriaGroup.position.y = this.two.height / 2;
+    this.bacteriaGroup.position.x = this.two.width / 2 / this.scale;
+    this.bacteriaGroup.position.y = this.two.height / 2 / this.scale;
 
     // disable dragging and removability for all antibiotics
     this.antibioticDisks.forEach(disk => {
@@ -208,6 +209,18 @@ class PetriPlate {
         self.two.unbind("update");
       }
     }
+  }
+
+  /**
+   * @param {number} value - scale factor
+   */
+  set scale(value) {
+    if (!this.renderGroup) return;
+    this.renderGroup.scale = value;
+  }
+
+  get scale() {
+    return this.renderGroup ? this.renderGroup.scale : 1;
   }
 }
 

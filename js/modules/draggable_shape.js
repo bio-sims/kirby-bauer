@@ -72,10 +72,11 @@ class DraggableShape {
     const paddingTop = parseInt(containerStyle.paddingTop, 10);
     const borderLeft = parseInt(containerStyle.borderLeftWidth, 10);
     const borderTop = parseInt(containerStyle.borderTopWidth, 10);
-
+    const scale = this.two.height / this.two.originalHeight;
+    console.log(scale);
     return {
-      x: e.clientX - containerRect.left - paddingLeft - borderLeft,
-      y: e.clientY - containerRect.top - paddingTop - borderTop,
+      x: (e.clientX - containerRect.left - paddingLeft - borderLeft) / scale,
+      y: (e.clientY - containerRect.top - paddingTop - borderTop) / scale,
     };
   }
   /**
