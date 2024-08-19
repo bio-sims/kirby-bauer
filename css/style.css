@@ -43,6 +43,7 @@ html[data-theme="dark"] {
   color: var(--cr-text-primary);
   background-color: var(--cr-bg-primary);
   transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+  --nav-height: 3rem;
 }
 
 *::-webkit-scrollbar {
@@ -124,7 +125,7 @@ nav {
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 3.75rem;
+  height: var(--nav-height);
   border-bottom: 1px solid var(--cr-border-primary);
 }
 
@@ -337,9 +338,9 @@ main.card-container {
 
 @media (width <= 1000px) {
   main.card-container {
-      flex-direction: column;
-      align-items: center;
-      padding: 0;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
   }
 }
 
@@ -347,6 +348,7 @@ main.card-container {
   main.card-container {
     flex-direction: row;
     align-items: flex-start;
+    max-height: calc(100vh - var(--nav-height));
   }
 }
 
@@ -357,6 +359,7 @@ main.card-container .card-panel {
     align-items: center;
     gap: 1rem;
     max-width: 650px;
+    flex-grow: 1;
 }
 
 section.card {
@@ -381,9 +384,22 @@ section.card {
 }
 
 #kirby-sim-container {
+  display: flex;
+  justify-content: center;
+  height: min(calc(100vh - var(--nav-height) - 2rem), 40vw);
+  flex-grow: 2;
   border-radius: var(--br-radius-small);
   overflow: hidden;
-  min-width: 500px;
+}
+
+@media (width <= 700px) {
+  #kirby-sim-container {
+    height:100vw;
+  }
+}
+
+#kirby-sim-container > div {
+  aspect-ratio: 1 / 1;
 }
 
 table {

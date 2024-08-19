@@ -67,7 +67,8 @@ function updateSusceptibilityTable() {
 function main() {
   setupTheme();
   document.getElementById("theme-icon-path").setAttribute("d", getThemeIconData());
-  mainPetri = new PetriPlate("kirby-sim-container");
+  mainPetri = new PetriPlate("kirby-sim");
+  const originalHeight = mainPetri.two.height;
 
   // -- fill select boxes --
   const antibioticName = document.getElementById("antibiotic-name");
@@ -131,6 +132,21 @@ function main() {
   });
 
   updateSusceptibilityTable();
+
+  // --- petri scale events ---
+  window.addEventListener("resize", () => {
+    // get difference between height of svg and current height of container
+    const svg = document.getElementById("kirby-sim");
+    const container = svg.parentElement;
+    const containerRect = container.getBoundingClientRect();
+    const scale = containerRect.height / originalHeight;
+    // set the scale of the svg and the width/height of the svg
+    mainPetri.scale = scale;
+    mainPetri.two.width = containerRect.height;
+    mainPetri.two.height = containerRect.height;
+  });
+
+  window.dispatchEvent(new Event("resize"));
 }
 
 main();
