@@ -157,6 +157,13 @@ nav li.nav-link {
   padding: 0 1rem;
 }
 
+@media (width < 600px) {
+  nav li.nav-link {
+    padding: 0;
+    padding-left: 0.5rem;
+  }
+}
+
 nav li.nav-link:hover {
   background-color: var(--cr-bg-secondary);
 }
@@ -185,6 +192,29 @@ button.svg-button > svg {
   width: 2rem;
   height: 2rem;
 }
+
+button.icon-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  gap: 0.5rem;
+}
+
+button.icon-button svg {
+  vertical-align: middle;
+  fill: currentColor;
+  height: 1.5rem;
+  width: 1.25rem;
+}
+
+div.merged-button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 
 form {
   display: flex;
@@ -386,10 +416,14 @@ section.card {
 #kirby-sim-container {
   display: flex;
   justify-content: center;
-  height: min(calc(100vh - var(--nav-height) - 2rem), 40vw);
-  flex-grow: 2;
+  height: min(calc(100vh - var(--nav-height) - 2rem), 50vw);
+  flex-grow: 3;
   border-radius: var(--br-radius-small);
   overflow: hidden;
+}
+
+#kirby-sim-container.fullscreen {
+  height: min(calc(100vh - var(--nav-height) - 2rem), 100vw);
 }
 
 @media (width <= 700px) {
