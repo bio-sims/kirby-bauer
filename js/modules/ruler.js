@@ -19,6 +19,7 @@ class Ruler {
       let tickHeight = (height * scale) / 4;
       if (i % 10 === 0) {
         const text = two.makeText(i / 10, xOffsetPos, y + tickHeight + (scale * 2));
+        text.size = 13 - (2 * scale);
         tickHeight *= 4;
         group.add(text);
       } else if (i % 5 === 0) {

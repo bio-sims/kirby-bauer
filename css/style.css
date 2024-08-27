@@ -9,6 +9,7 @@
 /* GLOBAL VARIABLES */
 html[data-theme="light"] {
   --cr-text-primary: rgb(17, 15, 13);
+  --cr-text-secondary: rgb(119, 119, 119);
   --cr-text-contrast: rgb(255, 255, 255);
   --cr-bg-primary: rgb(255, 255, 255);
   --cr-bg-secondary: rgb(246, 248, 250);
@@ -25,6 +26,7 @@ html[data-theme="light"] {
 
 html[data-theme="dark"] {
   --cr-text-primary: rgb(255, 255, 255);
+  --cr-text-secondary: rgb(119, 119, 119);
   --cr-text-contrast: rgb(17, 15, 13);
   --cr-bg-primary: rgb(13, 17, 23);
   --cr-bg-secondary: rgb(22, 27, 34);
@@ -378,7 +380,6 @@ main.card-container {
   main.card-container {
     flex-direction: row;
     align-items: flex-start;
-    max-height: calc(100vh - var(--nav-height));
   }
 }
 
@@ -419,14 +420,13 @@ section.card {
   height: min(calc(100vh - var(--nav-height) - 2rem), 50vw);
   flex-grow: 3;
   border-radius: var(--br-radius-small);
-  overflow: hidden;
 }
 
 #kirby-sim-container.fullscreen {
   height: min(calc(100vh - var(--nav-height) - 2rem), 100vw);
 }
 
-@media (width <= 700px) {
+@media (width <= 1000px) {
   #kirby-sim-container {
     height:100vw;
   }
@@ -434,6 +434,11 @@ section.card {
 
 #kirby-sim-container > div {
   aspect-ratio: 1 / 1;
+}
+
+aside p {
+  font-size: 0.75rem;
+  color: var(--cr-text-secondary);
 }
 
 table {

@@ -1,5 +1,21 @@
 import PetriPlate from "./modules/petri_plate.js";
-import { Antibiotic, Ampicillin, Chloramphenicol, Penicillin, Tetracycline } from "./modules/antibiotics.js";
+import {
+  Antibiotic,
+  Amoxicillin,
+  Ampicillin,
+  Cephalothin,
+  Chloramphenicol,
+  Ciprofloxacin,
+  Clindamycin,
+  Erythromycin,
+  Oxacillin,
+  Penicillin,
+  Streptomycin,
+  Tetracycline,
+  Tobramycin,
+  TrimethoprimSulfa,
+  Vancomycin
+} from "./modules/antibiotics.js";
 import { getThemeIconData, setupTheme, toggleTheme } from "./modules/theme.js";
 import bacteria from "./modules/bacteria.js";
 
@@ -9,9 +25,19 @@ import bacteria from "./modules/bacteria.js";
  */
 const antibiotics = [
   { class: Ampicillin, amount: 30 },
+  { class: Amoxicillin, amount: 30 },
+  { class: Cephalothin, amount: 30 },
   { class: Chloramphenicol, amount: 30 },
+  { class: Ciprofloxacin, amount: 30 },
+  { class: Clindamycin, amount: 30 },
+  { class: Erythromycin, amount: 30 },
+  { class: Oxacillin, amount: 30 },
   { class: Penicillin, amount: 30 },
+  { class: Streptomycin, amount: 30 },
   { class: Tetracycline, amount: 30 },
+  { class: Tobramycin, amount: 30 },
+  { class: TrimethoprimSulfa, amount: 30 },
+  { class: Vancomycin, amount: 30 },
 ]
 
 /**
@@ -49,12 +75,12 @@ function updateSusceptibilityTable() {
       const row = tableBody.insertRow();
       row.insertCell().textContent = `${antibiotic.name} (${antibiotic.abbreviation})`;
       row.insertCell().textContent = `≤ ${susceptibility.resistant}`;
-      if (susceptibility.susceptible === susceptibility.resistant) {
-        row.insertCell().textContent = `${susceptibility.susceptible}`;
+      if (Math.abs(susceptibility.resistant - susceptibility.susceptible) <= 1) {
+        row.insertCell().textContent = `-`;
       } else if (susceptibility.susceptible === 0) {
         row.insertCell().textContent = `0`;
       } else {
-        row.insertCell().textContent = `${susceptibility.resistant + 1}-${susceptibility.susceptible}`;
+        row.insertCell().textContent = `${susceptibility.resistant + 1}-${susceptibility.susceptible - 1}`;
       }
       row.insertCell().textContent = `≥ ${susceptibility.susceptible}`;
     });

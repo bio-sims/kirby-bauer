@@ -107,7 +107,7 @@ class PetriPlate {
     this.petriBackgroundGroup.position.x = this.two.width / 2;
     this.petriBackgroundGroup.position.y = this.two.height / 2;
 
-    this.millimeterScale = petriDish.radius / 100;
+    this.millimeterScale = petriDish.radius / 150;
 
     // draw the ruler
     this.rulerWrapper = new Ruler(this.millimeterScale * 25 + 5, this.millimeterScale * 10 + 5, 50, 10, this.millimeterScale, this.two);
