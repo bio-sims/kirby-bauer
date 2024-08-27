@@ -13,6 +13,7 @@ class AntibioticDisk {
     this.antibiotic = antibiotic;
     const circle = two.makeCircle(x, y, radius);
     const text = two.makeText(antibiotic.abbreviation, x, y);
+    text.size = 9;
     const group = two.makeGroup([circle, text]);
     group.center();
     group.translation.set(x, y);

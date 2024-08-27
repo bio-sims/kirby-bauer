@@ -1,26 +1,20 @@
 export default {
   "EColi": {
     "name": "Escherichia coli",
-    "abbreviation": "E. coli"
+    "abbreviation": "E. coli",
+    "genus": "Escherichia",
+    "species": "coli",
   },
   "SAureus": {
-    "name": "Staphylococcus Aureus",
-    "abbreviation": "S. aureus"
-  },
-  "SEpidermidis": {
-    "name": "Staphylococcus epidermidis",
-    "abbreviation": "S. epidermidis"
-  },
-  "SalmonellaEnterica": {
-    "name": "Salmonella enterica",
-    "abbreviation": "Salmonella enterica"
+    "name": "Staphylococcus aureus",
+    "abbreviation": "S. aureus",
+    "genus": "Staphylococcus",
+    "species": "aureus",
   },
   "PseudomonasAeruginosa": {
     "name": "Pseudomonas aeruginosa",
-    "abbreviation": "P. aeruginosa"
+    "abbreviation": "P. aeruginosa",
+    "genus": "Pseudomonas",
+    "species": "aeruginosa",
   },
-  "MycoplasmaPneumoniae": {
-    "name": "Mycoplasma pneumoniae",
-    "abbreviation": "M. pneumoniae"
-  }
 }
