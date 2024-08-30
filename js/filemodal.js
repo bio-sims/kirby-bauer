@@ -52,6 +52,8 @@ const fetchGitFiles = async () => {
     files.forEach((file) => {
       const fileElement = document.createElement("li");
       const fileLink = document.createElement("a");
+      // open file in new tab
+      fileLink.target = "_blank";
       fileLink.href = file.download_url;
       fileLink.textContent = file.name;
       fileElement.appendChild(fileLink);
