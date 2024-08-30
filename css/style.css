@@ -116,9 +116,10 @@ body {
   font-family: var(--font-vietnam);
 }
 
-svg {
+.icon-button svg {
   user-select: none;
   touch-action: none;
+  pointer-events: none;
 }
 
 nav {
@@ -157,17 +158,33 @@ nav li.nav-link {
   height: 100%;
   min-width: 6rem;
   padding: 0 1rem;
+  text-wrap: nowrap;
 }
 
-@media (width < 600px) {
-  nav li.nav-link {
-    padding: 0;
-    padding-left: 0.5rem;
-  }
+nav > ul#nav-left {
+  margin-right: 2rem;
 }
 
 nav li.nav-link:hover {
   background-color: var(--cr-bg-secondary);
+}
+
+@media (width > 800px) {
+  nav li.nav-link .small {
+    display: none;
+  }
+}
+
+@media (width <= 800px) {
+  nav li.nav-link .large {
+    display: none;
+  }
+}
+
+@media (width <= 600px) {
+  nav > ul#nav-left {
+    margin-right: 0rem;
+  }
 }
 
 nav li.right-align {
