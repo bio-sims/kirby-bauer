@@ -453,6 +453,10 @@ section.card {
   aspect-ratio: 1 / 1;
 }
 
+#kirby-sim-container svg text {
+  user-select: none;
+}
+
 aside p {
   font-size: 0.75rem;
   color: var(--cr-text-secondary);
